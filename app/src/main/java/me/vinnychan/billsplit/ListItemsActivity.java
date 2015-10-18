@@ -3,14 +3,22 @@ package me.vinnychan.billsplit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.vinnychan.billsplit.model.Item;
 import me.vinnychan.billsplit.model.Receipt;
@@ -21,18 +29,25 @@ import me.vinnychan.billsplit.model.User;
 public class ListItemsActivity extends AppCompatActivity {
     Receipt receipt;
     ListAdapter adapter;
+    private Firebase firebaseRef;
+    private Firebase roomRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
+        firebaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
+
         setContentView(R.layout.activity_list_items);
+
         setTitle("Receipt Items");
         Intent i = getIntent();
         receipt = (Receipt) i.getSerializableExtra("Receipt");
-        adapter = new Adapter(this, receipt.getItems());
-        populateList();
-        ListView lvMain = (ListView) findViewById(R.id.list);
-        lvMain.setAdapter(adapter);
+        pushToFirebase();
+        // adapter = new Adapter(this, receipt.getItems());
+        // populateList();
+        // ListView lvMain = (ListView) findViewById(R.id.list);
+        // lvMain.setAdapter(adapter);
     }
 
     public void populateList() {
@@ -61,4 +76,26 @@ public class ListItemsActivity extends AppCompatActivity {
 //                (ListView) findViewById(R.id.list);
 //        view.setAdapter(adapter);
     }
+
+    private void pushToFirebase() {
+        Firebase roomsRef = firebaseRef.child("rooms");
+        String roomName = receipt.getRoomID();
+        roomRef = roomsRef.child(roomName);
+
+        roomRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> roomMap = (Map<String, Object>) snapshot.getValue();
+                Map<String, Item> itemMap = new HashMap<>();
+                for (Item i : receipt.getItems()) {
+                    itemMap.put(i.getID(), i);
+                }
+                roomMap.put("items", itemMap);
+                roomRef.setValue(roomMap);
+                // Log.d("PushToFirebase", snapshot.getValue().toString());
+            }
+            @Override public void onCancelled(FirebaseError error) { }
+        });
+    }
+
 }

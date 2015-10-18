@@ -37,11 +37,13 @@ public class ParseImageActivity extends AppCompatActivity {
         setTitle("");
 
         // imageView = (ImageView) findViewById(R.id.imageView);
-        final byte[] byteArray = getIntent().getByteArrayExtra("image");
+        Intent i = getIntent();
+        final byte[] byteArray = i.getByteArrayExtra("image");
         Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         // imageView.setImageBitmap(bmp);
-        room = new Room("awesome", new User("nerd"));
+
+        Room room = (Room) i.getSerializableExtra("room");
         receipt = new Receipt(room);
 
 

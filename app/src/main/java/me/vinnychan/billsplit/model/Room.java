@@ -1,5 +1,6 @@
 package me.vinnychan.billsplit.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +12,7 @@ import java.util.Set;
  * Created by TING on 17-Oct-2015.
  * Represents a "room"/group of people who are splitting the bill amongst them
  */
-public class Room {
+public class Room implements Serializable {
     private String name;
     private User admin;
     private ArrayList<User> users;

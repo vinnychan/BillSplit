@@ -18,7 +18,10 @@ public class Receipt implements Serializable {
 
     public Receipt(Room room) {
         items = new ArrayList<>();
+        roomID = room.getName();
     }
+
+    public String getRoomID() { return roomID; }
 
     public int getNumItems() { return items.size(); }
 

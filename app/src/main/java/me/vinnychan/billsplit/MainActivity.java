@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     private Firebase firebaseRef;
+    private Room room;
 
     ImageView imageView;
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         int newRoomName = Integer.parseInt(snapshot.child("numberOfRooms").getValue().toString()) + 1;
                         firebaseRef.child("numberOfRooms").setValue(Integer.toString(newRoomName));
                         Firebase roomRef = firebaseRef.child("rooms");
-                        Room room = new Room(Integer.toString(newRoomName), user);
+                        room = new Room(Integer.toString(newRoomName), user);
 
                         Map<String, Object> roomMap = new HashMap<String, Object>(4);
                         roomMap.put("name", Integer.toString(newRoomName));
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 byteArray = FileUtils.readFileToByteArray(image);
                 Intent goParseImage = new Intent(getBaseContext(), ParseImageActivity.class);
                 goParseImage.putExtra("image", byteArray);
+                goParseImage.putExtra("room", room);
                 startActivity(goParseImage);
             } catch (IOException e) {
                 Log.e("Algorithmia", "Got exception", e);
