@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.firebase.client.Firebase;
+
 public class LobbyRoomActivity extends AppCompatActivity {
 
     String username;
@@ -27,8 +29,8 @@ public class LobbyRoomActivity extends AppCompatActivity {
             }
         });
 
-
         username = getIntent().getStringExtra("USERNAME");
+
     }
 
 }
