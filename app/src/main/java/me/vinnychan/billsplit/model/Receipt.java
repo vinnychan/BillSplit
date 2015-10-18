@@ -11,11 +11,13 @@ public class Receipt {
     private String id;
     private Image photo;
     private ArrayList<Item> items;
+    private String roomID;
 
-    public Receipt(Image photo) {
+    public Receipt(Image photo, Room room) {
         id = createNewId();
         this.photo = photo;
         items = new ArrayList<>();
+        roomID = room.getId();
     }
 
     public int getNumItems() { return items.size(); }
@@ -33,7 +35,7 @@ public class Receipt {
     public void removeItem(Item item) { items.remove(item); }
 
     private String createNewId() {
-        return "id";
-        //todo
+        return "";
+        //todo firebase stuff
     }
 }
