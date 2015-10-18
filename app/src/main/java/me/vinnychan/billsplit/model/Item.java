@@ -34,20 +34,6 @@ public class Item {
 
     private List<Item> items;
 
-    private Firebase firebaseRef;
-
-    public void initializeData() {
-        items = new ArrayList<>();
-        items.add(new Item("Item 1", new BigDecimal(5.00)));
-        items.add(new Item("Item 2", new BigDecimal(15.00)));
-        items.add(new Item("Item 3", new BigDecimal(10.00)));
-
-    }
-
-    public List<Item> getItems() {
-        initializeData();
-        return items;
-    }
 
     public String getDescription() { return description; }
     public BigDecimal getPrice() { return price; }

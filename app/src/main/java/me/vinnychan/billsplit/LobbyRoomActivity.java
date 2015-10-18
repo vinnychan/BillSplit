@@ -16,6 +16,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.vinnychan.billsplit.model.Item;
 
@@ -49,20 +51,29 @@ public class LobbyRoomActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
-        Item item = new Item("test", new BigDecimal(1.00));
+        final List<Item> items = new ArrayList<>();
 
-        RVAdapter adapter = new RVAdapter(item.getItems());
+        final RVAdapter adapter = new RVAdapter(items);
         rv.setAdapter(adapter);
 
-        System.out.println(fireBaseRef.child("Items2"));
 
+            fireBaseRef.child("Items2").addValueEventListener(new ValueEventListener() {
 
-        for (Item oitem : item.getItems()) {
-            fireBaseRef.child(oitem.getDescription()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    System.out.println(dataSnapshot.getValue());
+
+                    items.clear();
+                    for (DataSnapshot itemObject : dataSnapshot.getChildren()) {
+                        Item i = new Item(itemObject.getKey(), new BigDecimal((long) itemObject.getValue()));
+                        items.add(i);
+
+                        System.out.println(itemObject.getValue().getClass().getName());
+
+                    }
+                    adapter.notifyDataSetChanged();
+
                 }
+
 
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
@@ -70,7 +81,10 @@ public class LobbyRoomActivity extends AppCompatActivity {
                 }
             });
 
-        }
+
+
+
+
 
     }
 

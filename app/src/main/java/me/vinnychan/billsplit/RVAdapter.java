@@ -17,10 +17,15 @@ import me.vinnychan.billsplit.model.Item;
  */
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
 
-    List<Item> items;
+    private List<Item> items;
 
     RVAdapter(List<Item> items){
         this.items = items;
+    }
+
+    public void setItemList(List<Item> listItems) {
+        this.items=listItems;
+        notifyItemRangeChanged(0, items.size());
     }
 
     @Override
