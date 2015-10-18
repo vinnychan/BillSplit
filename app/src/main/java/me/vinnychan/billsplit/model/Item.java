@@ -126,4 +126,8 @@ public class Item {
         }
         return totalSoFar.equals(price);
     }
+
+    public String toString() {
+        return description + " ($" + price + ")";
+    }
 }
