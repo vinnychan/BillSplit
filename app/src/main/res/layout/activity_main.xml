@@ -19,28 +19,34 @@
         android:background="#ecf0f1"
         android:inputType="textCapCharacters"
         android:textColor="#7f8c8d"
-        android:layout_marginBottom="10dp"
-        android:layout_centerVertical="true"/>
+        android:layout_marginTop="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/create_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/username_edittext"
         android:background="#e67e22"
         android:textColor="#fff"
         android:textSize="24sp"
-        android:layout_marginBottom="10dp"
-        android:text="CREATE"/>
+        android:text="CREATE"
+        android:layout_below="@+id/username_edittext"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
 
     <Button
         android:id="@+id/join_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/create_button"
         android:background="#8e44ad"
         android:textColor="#fff"
         android:textSize="24sp"
-        android:text="JOIN"/>
+        android:text="JOIN"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/create_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
