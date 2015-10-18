@@ -20,7 +20,7 @@
         <activity
             android:name=".LobbyRoomActivity"
             android:label="@string/title_activity_lobby_room"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
