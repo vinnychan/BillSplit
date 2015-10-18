@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Welcome " + username + "!", Toast.LENGTH_LONG).show();
 
                 // To change to a new activity, we do it with "Intents"
-                Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
-                goToChatRoom.putExtra("USERNAME", username);
-                startActivity(goToChatRoom);
+                Intent goToLobbyRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
+                goToLobbyRoom.putExtra("USERNAME", username);
+                startActivity(goToLobbyRoom);
 
             }
         });

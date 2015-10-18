@@ -9,6 +9,8 @@ import android.view.View;
 
 public class LobbyRoomActivity extends AppCompatActivity {
 
+    String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,9 @@ public class LobbyRoomActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+        username = getIntent().getStringExtra("USERNAME");
     }
 
 }
