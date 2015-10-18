@@ -143,15 +143,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
             proportions.put(u.toString(), NumberFormat.getCurrencyInstance().format(amt).toString());
         }
         itemMap.put("userProportions", proportions);
-//
-//        itemMap.put("usersWhoDidNotSpecify", item.getUserProportionNotSpecified().toArray());
-//        itemMap.put("usersWhoSpecifiedAmts", item.getUserSpecifiedAmtProportion().toArray());
-//
-//        HashMap<String, String> percentages = new HashMap<String, String>();
-//        for (User u: item.getSpecifiedPercentageProportions().keySet()) {
-//            percentages.put(u.toString(), item.getSpecifiedPercentageProportions().get(u).toString());
-//        }
-//        itemMap.put("usersWhoSpecifiedPercentages", percentages);
+
+        HashMap<String, String> usersWhoDidNotSpecify = new HashMap<String, String>();
+        for (User u: item.getUserProportionNotSpecified()) {
+            usersWhoDidNotSpecify.put("name", u.getName());
+        }
+        itemMap.put("usersWhoDidNotSpecify", usersWhoDidNotSpecify);
+
+        HashMap<String, String> usersWhoSpecifiedAmts = new HashMap<String, String>();
+        for (User u: item.getUserSpecifiedAmtProportion()) {
+            usersWhoSpecifiedAmts.put("name", u.getName());
+        }
+        itemMap.put("usersWhoSpecifiedAmts", usersWhoSpecifiedAmts);
+
+        HashMap<String, String> percentages = new HashMap<String, String>();
+        for (User u: item.getSpecifiedPercentageProportions().keySet()) {
+            percentages.put(u.toString(), item.getSpecifiedPercentageProportions().get(u).toString());
+        }
+        itemMap.put("usersWhoSpecifiedPercentages", percentages);
 
         HashMap<String, Object> finalMap = new HashMap<String, Object>();
         finalMap.put(item.getID(), itemMap);
