@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,11 +23,17 @@ import com.firebase.client.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+import me.vinnychan.billsplit.model.Item;
 import me.vinnychan.billsplit.model.Room;
 import me.vinnychan.billsplit.model.User;
 
@@ -113,37 +120,63 @@ public class MainActivity extends AppCompatActivity {
                         if (!snapshot.child("rooms").hasChild(roomname)) return;
 
                         DataSnapshot roomRef = snapshot.child("rooms").child(roomname);
+                        User roomAdmin = new User(roomRef.child("admin").getValue().toString());
+                        String roomName = roomRef.child("name").getValue().toString();
 
-                        User admin = new User(roomRef.child("admin").getValue().toString());
+                        Room room = new Room(roomName, roomAdmin);
 
-
-
-                        Iterable<DataSnapshot> ds = snapshot.child("rooms").child(roomname).getChildren();
-
-
-                        String name = "";
                         ArrayList<User> users = new ArrayList<User>();
-                        for (DataSnapshot s: ds) {
-                            if (s.getKey() == "admin") {
-                                admin = new User(s.getValue().toString());
-                            } else if (s.getKey() == "name") {
-                                name = s.getValue().toString();
-                            } else if (s.getKey() == "items"){
-                                //todo
-
-                            } else if (s.getKey() == "users") {
-                                for (DataSnapshot u: s.getChildren()) {
-                                    users.add(new User(u.child("name").getValue().toString()));
-                                }
-                            }
+                        for (DataSnapshot u: roomRef.child("users").getChildren()) {
+                            users.add(new User(u.child("name").getValue().toString()));
                         }
-                        Room room = new Room(name, admin);
                         room.setUsers(users);
 
+                        Set<Item> items = new HashSet<Item>();
+                        for (DataSnapshot item: roomRef.child("items").getChildren()) {
+                            String itemID = item.getKey();
+                            String itemDescription = item.child("description").getValue().toString();
+                            BigDecimal itemPrice = BigDecimal.valueOf(Double.parseDouble(item.child("price").getValue().toString().substring(1)));
+
+                            Iterable<DataSnapshot> userProportns = item.child("userProportions").getChildren();
+                            HashMap<User, BigDecimal> userProportions = new HashMap<User, BigDecimal>();
+                            for (DataSnapshot up: userProportns) {
+                                BigDecimal amt = new BigDecimal(Double.parseDouble(up.getValue().toString().substring(1)));
+                                userProportions.put(new User(up.getKey()), amt); // TODO !!! NEED TO NOT CREATE USER, incorrect
+                            }
+
+                            Iterable<DataSnapshot> usersNotSpecified = item.child("usersWhoDidNotSpecify").getChildren();
+                            HashSet<User> userProportionNotSpecified = new HashSet<User>();
+                            for (DataSnapshot user: usersNotSpecified) {
+                                userProportionNotSpecified.add(new User(user.child("name").getValue().toString())); // todo look into overriding user equal function
+                            }
+
+                            Iterable<DataSnapshot> usersAmtSpecified = item.child("usersWhoSpecifiedAmts").getChildren();
+                            HashSet<User> userSpecifiedAmtProportion = new HashSet<User>();
+                            for (DataSnapshot user: usersNotSpecified) {
+                                userSpecifiedAmtProportion.add(new User(user.child("name").getValue().toString()));
+                            }
+
+                            Iterable<DataSnapshot> usersPerctSpecified = item.child("usersWhoSpecifiedPercentages").getChildren();
+                            HashMap<User, Integer> specifiedPercentageProportions = new HashMap<User, Integer>();
+                            for (DataSnapshot userPerctg: usersPerctSpecified) {
+                                User user = new User(userPerctg.getKey());
+                                int percentage = Integer.parseInt(userPerctg.getValue().toString());
+                                specifiedPercentageProportions.put(user, percentage);
+                            }
+
+                            Item i = new Item(itemDescription, itemPrice);
+                            i.setID(itemID);
+                            i.setUserProportions(userProportions);
+                            i.setUserProportionNotSpecified(userProportionNotSpecified);
+                            i.setUserSpecifiedAmtProportion(userSpecifiedAmtProportion);
+                            i.setSpecifiedPercentageProportions(specifiedPercentageProportions);
+                        }
+                        room.setItems(items);
+
                         room.addMember(new User(username));
-//                        HashMap<String, Object> newUsersList = new HashMap<String, Object>(1);
-//                        newUsersList.put("users", room.getUsers());
+
                         firebaseRef.child("rooms").child(roomname).child("users").setValue(room.getUsers());
+                        // todo update items in firebase since proportions changed after adding new member
 
                         Toast.makeText(getBaseContext(), "Welcome " + username + "!", Toast.LENGTH_LONG).show();
 
