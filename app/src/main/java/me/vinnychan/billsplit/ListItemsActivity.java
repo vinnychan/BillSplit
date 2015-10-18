@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.math.BigDecimal;
@@ -19,6 +20,8 @@ import me.vinnychan.billsplit.model.User;
 
 public class ListItemsActivity extends AppCompatActivity {
     Receipt receipt;
+    ListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +29,10 @@ public class ListItemsActivity extends AppCompatActivity {
         setTitle("Receipt Items");
         Intent i = getIntent();
         receipt = (Receipt) i.getParcelableExtra("Receipt");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        adapter = new Adapter(this, receipt.getItems());
         populateList();
+        ListView lvMain = (ListView) findViewById(R.id.list);
+        lvMain.setAdapter(adapter);
     }
 
     public void populateList() {
@@ -55,9 +56,9 @@ public class ListItemsActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new
                 ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, descripArray);
-
-        ListView view=
-                (ListView) findViewById(R.id.list);
-        view.setAdapter(adapter);
+//
+//        ListView view=
+//                (ListView) findViewById(R.id.list);
+//        view.setAdapter(adapter);
     }
 }
