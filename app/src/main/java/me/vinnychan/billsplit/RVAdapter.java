@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -56,13 +57,40 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
         CardView cv;
         TextView itemName;
         TextView itemPrice;
+        SeekBar seekBar;
+        TextView amountPaying;
+        TextView percentage;
 
         ItemViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             itemName = (TextView)itemView.findViewById(R.id.item_name);
             itemPrice = (TextView)itemView.findViewById(R.id.item_price);
+            seekBar = (SeekBar) itemView.findViewById(R.id.SeekBarId);
+            amountPaying = (TextView) itemView.findViewById(R.id.amount_paying);
+            percentage = (TextView) itemView.findViewById(R.id.percentage);
+
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                public void onStopTrackingTouch(SeekBar bar) {
+                    int value = bar.getProgress(); // the value of the seekBar progress
+                }
+
+                public void onStartTrackingTouch(SeekBar bar) {
+
+                }
+
+                public void onProgressChanged(SeekBar bar,
+                                              int paramInt, boolean paramBoolean) {
+                    percentage.setText("" + paramInt + "%"); // here in textView the percent will be shown
+                    amountPaying.setText("Amount paying: $" +
+                            String.format("%.2f", Double.parseDouble((String) itemPrice.getText()
+                                    .subSequence(1, itemPrice.getText().length())) * (double) paramInt/100 ));
+                }
+            });
         }
+
+
     }
 
 }
