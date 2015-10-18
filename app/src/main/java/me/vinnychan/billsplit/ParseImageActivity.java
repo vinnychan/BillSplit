@@ -17,12 +17,18 @@ import java.util.regex.Pattern;
 import me.vinnychan.billsplit.model.Algorithmia;
 import me.vinnychan.billsplit.model.Item;
 import me.vinnychan.billsplit.model.Receipt;
+import me.vinnychan.billsplit.model.Room;
+import me.vinnychan.billsplit.model.User;
 
 
 public class ParseImageActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
+
+    Room room;
     Receipt receipt;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +38,10 @@ public class ParseImageActivity extends AppCompatActivity {
         Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         // imageView.setImageBitmap(bmp);
+        room = new Room("awesome", new User("nerd"));
+        receipt = new Receipt(room);
+
+
 
         new AsyncTask<Void,Void,String>() {
             @Override
@@ -45,9 +55,17 @@ public class ParseImageActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String text) {
                 Log.w("Algorithmia", "Got response: " + text);
+
                 Intent goListItems = new Intent(getBaseContext(), ListItemsActivity.class);
                 goListItems.putExtra("Receipt", receipt);
                 startActivity(goListItems);
+
+                // String mockOcrOutput = "TAXES PER $100 EARNED\n\nSERVED EV:\nCANADA'S GOVERNMENTS\n\nGUEST\nAVERAGE rmlu\n\n4qu w. 1015\n\nINCOME TAXES $14.34\nPAYROLL TAXES $1\"\nSALES TAXES $7\nPROPERTY TAXES $4\nPROFIT TAXES $4\n\"SIN\" TAXES $1\nVEHICLE/FUEL TAXES $1\nOTHER TAXES $2\nTOTAL $44\n\nGDVERNMENTS TAKE $44\nFROM EVERY $100\nCANADIAN FAMILIES EARN\n\nwwwfraserinshlutearg\n\n";
+
+                parseItems(receipt, text);
+                for (Item i : receipt.getItems())
+                    Log.d("Parser", i.toString());
+
             }
         }.execute();
     }
@@ -75,24 +93,8 @@ public class ParseImageActivity extends AppCompatActivity {
             Log.e("Algorithmia", "Algorithmia error", e);
             return null;
         }
-        // assume we have our OCR output, here we parse the output string
-//        Room mockRoom = new Room("mock room", new User("nerd"));
-//        Receipt receipt = new Receipt(bmp, mockRoom);
-//        String mockOcrOutput = "TAXES PER $100 EARNED\n\nSERVED EV:\nCANADA'S GOVERNMENTS\n\nGUEST\nAVERAGE rmlu\n\n4qu w. 1015\n\nINCOME TAXES $14.34\nPAYROLL TAXES $1\"\nSALES TAXES $7\nPROPERTY TAXES $4\nPROFIT TAXES $4\n\"SIN\" TAXES $1\nVEHICLE/FUEL TAXES $1\nOTHER TAXES $2\nTOTAL $44\n\nGDVERNMENTS TAKE $44\nFROM EVERY $100\nCANADIAN FAMILIES EARN\n\nwwwfraserinshlutearg\n\n";
-//        parseItems(receipt, mockOcrOutput);
-//        for (Item i : receipt.getItems())
-//            Log.d("Parser", i.toString());
 
     }
-
-//
-//    // assume we have our OCR output, here we parse the output string
-//    Room mockRoom = new Room(new User("nerd"));
-//    Receipt receipt = new Receipt(mockRoom);
-//    String mockOcrOutput = "TAXES PER $100 EARNED\n\nSERVED EV:\nCANADA'S GOVERNMENTS\n\nGUEST\nAVERAGE rmlu\n\n4qu w. 1015\n\nINCOME TAXES $14.34\nPAYROLL TAXES $1\"\nSALES TAXES $7\nPROPERTY TAXES $4\nPROFIT TAXES $4\n\"SIN\" TAXES $1\nVEHICLE/FUEL TAXES $1\nOTHER TAXES $2\nTOTAL $44\n\nGDVERNMENTS TAKE $44\nFROM EVERY $100\nCANADIAN FAMILIES EARN\n\nwwwfraserinshlutearg\n\n";
-//    parseItems(receipt, mockOcrOutput);
-//    for (Item i : receipt.getItems())
-//            Log.d("Parser", i.toString());
 
     public static void parseItems(Receipt receipt, String ocrOutput) {
         Matcher m = Pattern.compile(".*\\d+\n").matcher(ocrOutput);

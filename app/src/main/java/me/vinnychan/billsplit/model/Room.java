@@ -44,4 +44,8 @@ public class Room {
     public void setAdmin(User admin) {
         this.admin = admin;
     }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
 }

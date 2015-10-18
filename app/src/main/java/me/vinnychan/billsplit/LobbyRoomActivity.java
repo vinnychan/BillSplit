@@ -1,6 +1,7 @@
 package me.vinnychan.billsplit;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,10 @@ public class LobbyRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lobby_room);
 
         username = getIntent().getStringExtra("USERNAME");
+
+        Snackbar.make(findViewById(R.id.lobby_content), "Welcome " + username + "!", Snackbar.LENGTH_LONG).show();
         Firebase.setAndroidContext(this);
+
     }
 
     @Override
@@ -54,7 +58,20 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
                 items.clear();
                 for (DataSnapshot itemObject : dataSnapshot.getChildren()) {
-                    Item i = new Item(itemObject.getKey(), new BigDecimal((long) itemObject.getValue()));
+                    BigDecimal price;
+//                    if (itemObject.child("price").getValue() instanceof Double) {
+//                        price = new BigDecimal((double) itemObject.child("price").getValue());
+//
+//                    } else {
+//                        price = new BigDecimal(0);
+//                    }
+//
+//                    if (itemObject.child("price").getValue() instanceof Long) {
+//                        price = new BigDecimal((long) itemObject.child("price").getValue());
+//                    }
+
+                    price = new BigDecimal(itemObject.child("price").getValue().toString());
+                    Item i = new Item(itemObject.getKey(), price);
                     items.add(i);
 
                     System.out.println(itemObject.getValue().getClass().getName());
