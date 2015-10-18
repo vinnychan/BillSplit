@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -21,7 +22,7 @@ import java.io.File;
 
 
 
-public class ParseImageActivity extends ActionBarActivity {
+public class ParseImageActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     ImageView imageView;

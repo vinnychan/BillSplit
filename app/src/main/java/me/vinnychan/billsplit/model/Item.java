@@ -1,7 +1,11 @@
 package me.vinnychan.billsplit.model;
 
+import com.firebase.client.Firebase;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,11 +17,28 @@ public class Item {
     private BigDecimal price;
     private Map<User, BigDecimal> userProportions;
 
-    public Item(String description, BigDecimal price, Receipt receipt) {
-        id = createNewId(receipt);
+    public Item(String description, BigDecimal price) {
+//        id = createNewId(receipt);
         this.description = description;
         this.price = price;
         userProportions = new HashMap<User, BigDecimal>();
+    }
+
+    private List<Item> items;
+
+    private Firebase firebaseRef;
+
+    public void initializeData() {
+        items = new ArrayList<>();
+        items.add(new Item("Item 1", new BigDecimal(5.00)));
+        items.add(new Item("Item 2", new BigDecimal(15.00)));
+        items.add(new Item("Item 3", new BigDecimal(10.00)));
+
+    }
+
+    public List<Item> getItems() {
+        initializeData();
+        return items;
     }
 
     public String getID() { return id; }
