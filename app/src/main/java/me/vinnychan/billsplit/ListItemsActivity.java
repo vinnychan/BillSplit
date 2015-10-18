@@ -28,7 +28,7 @@ public class ListItemsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_items);
         setTitle("Receipt Items");
         Intent i = getIntent();
-        receipt = (Receipt) i.getParcelableExtra("Receipt");
+        receipt = (Receipt) i.getSerializableExtra("Receipt");
         adapter = new Adapter(this, receipt.getItems());
         populateList();
         ListView lvMain = (ListView) findViewById(R.id.list);

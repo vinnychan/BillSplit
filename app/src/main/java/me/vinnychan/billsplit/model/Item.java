@@ -2,6 +2,7 @@ package me.vinnychan.billsplit.model;
 
 import com.firebase.client.Firebase;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import java.util.Set;
 /**
  * Created by TING on 17-Oct-2015.
  */
-public class Item {
+public class Item implements Serializable{
     private String description;
     private BigDecimal price;
     private Map<User, BigDecimal> userProportions;
