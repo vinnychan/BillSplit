@@ -1,3 +1,4 @@
+
 package me.vinnychan.billsplit;
 
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import com.firebase.client.Firebase;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,24 +27,18 @@ import me.vinnychan.billsplit.model.User;
 /**
  * Created by vincentchan on 15-10-18.
  */
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
+public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ItemViewHolder>{
 
-    private List<Item> items;
+    private ArrayList<Item> items;
     private String room;
     private User user;
     private Firebase firebaseRef;
 
-    RVAdapter(List<Item> items, String username, String room){
-        this.items = items;
-        user = new User(username);
-        this.room = room;
-    }
-
-    RVAdapter(List<Item> items) {
+    ListItemAdapter(ArrayList<Item> items) {
         this.items = items;
     }
 
-    public void setItemList(List<Item> listItems) {
+    public void setItemList(ArrayList<Item> listItems) {
         this.items=listItems;
         notifyItemRangeChanged(0, items.size());
     }
@@ -53,12 +49,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
     }
 
 
+
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_view_card_item, viewGroup, false);
         ItemViewHolder ivh = new ItemViewHolder(v);
         return ivh;
     }
+
 
     @Override
     public void onBindViewHolder(ItemViewHolder itemViewHolder, final int i) {
@@ -90,38 +88,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
         TextView itemName;
         TextView itemPrice;
         ImageView editButton; // currently can only edit by set amount, no option for percentage
-        SeekBar seekBar;
-        TextView amountPaying;
-        TextView percentage;
+
 
         ItemViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
+            cv = (CardView)itemView.findViewById(R.id.cv2);
             itemName = (TextView)itemView.findViewById(R.id.item_name);
             itemPrice = (TextView)itemView.findViewById(R.id.item_price);
             editButton = (ImageView)itemView.findViewById(R.id.edit_button);
-            seekBar = (SeekBar) itemView.findViewById(R.id.SeekBarId);
-            amountPaying = (TextView) itemView.findViewById(R.id.amount_paying);
-            percentage = (TextView) itemView.findViewById(R.id.percentage);
 
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-                public void onStopTrackingTouch(SeekBar bar) {
-                    int value = bar.getProgress(); // the value of the seekBar progress
-                }
 
-                public void onStartTrackingTouch(SeekBar bar) {
-
-                }
-
-                public void onProgressChanged(SeekBar bar,
-                                              int paramInt, boolean paramBoolean) {
-                    percentage.setText("" + paramInt + "%"); // here in textView the percent will be shown
-                    amountPaying.setText("Amount paying: $" +
-                            String.format("%.2f", Double.parseDouble((String) itemPrice.getText()
-                                    .subSequence(1, itemPrice.getText().length())) * (double) paramInt / 100));
-                }
-            });
         }
     }
 

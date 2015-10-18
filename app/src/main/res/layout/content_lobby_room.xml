@@ -12,4 +12,31 @@
     tools:context="me.vinnychan.billsplit.LobbyRoomActivity"
     tools:showIn="@layout/activity_lobby_room">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_name"
+        android:layout_alignParentTop="true"
+        android:textSize="24sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_price"
+        android:layout_below="@+id/item_name"
+        android:textSize="24sp"
+        />
+
+
+    <ImageView
+        android:id="@+id/edit_button"
+        android:src="@drawable/ic_edit_black_36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        />
+
 </RelativeLayout>

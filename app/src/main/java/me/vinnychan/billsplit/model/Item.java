@@ -17,12 +17,9 @@ import java.util.UUID;
 /**
  * Created by TING on 17-Oct-2015.
  */
-<<<<<<< HEAD
+
 public class Item implements Serializable{
-=======
-public class Item {
     private String id;
->>>>>>> 595859fabbcb9b0c1cdb7a0aef3d668ef144a9ca
     private String description;
     private BigDecimal price;
     private Map<User, BigDecimal> userProportions;
