@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BillSplit</string>
+    <string name="title_activity_lobby_room">LobbyRoomActivity</string>
+    <string name="title_activity_parse_image">ParseImageActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

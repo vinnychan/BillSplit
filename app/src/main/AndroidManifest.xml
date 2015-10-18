@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.vinnychan.billsplit" >
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,9 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LobbyRoomActivity"
+            android:label="@string/title_activity_lobby_room"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ParseImageActivity"
+            android:label="@string/title_activity_parse_image" >
+        </activity>
     </application>
 
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
 </manifest>
