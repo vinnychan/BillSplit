@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText usernameEditText = (EditText) findViewById(R.id.username_edittext);
                 String username = usernameEditText.getText().toString();
+                if (username.equals("")) {
+                    Snackbar.make(findViewById(R.id.main_content), "Please enter a username", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
                 Firebase userRef = firebaseRef.child("users");
                 final User user = new User(username);
 
@@ -106,12 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 EditText usernameEditText = (EditText) findViewById(R.id.username_edittext);
                 final String username = usernameEditText.getText().toString();
                 if (username.equals("")) {
+                    Snackbar.make(findViewById(R.id.main_content), "Please enter a username", Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
                 EditText roomnameEditText = (EditText) findViewById(R.id.roomname_edittext);
                 final String roomname = roomnameEditText.getText().toString();
                 if (roomname.equals("")) {
+                    Snackbar.make(findViewById(R.id.main_content), "Please enter a room number", Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
@@ -126,39 +132,39 @@ public class MainActivity extends AppCompatActivity {
                         Room room = new Room(roomName, roomAdmin);
 
                         ArrayList<User> users = new ArrayList<User>();
-                        for (DataSnapshot u: roomRef.child("users").getChildren()) {
+                        for (DataSnapshot u : roomRef.child("users").getChildren()) {
                             users.add(new User(u.child("name").getValue().toString()));
                         }
                         room.setUsers(users);
 
                         Set<Item> items = new HashSet<Item>();
-                        for (DataSnapshot item: roomRef.child("items").getChildren()) {
+                        for (DataSnapshot item : roomRef.child("items").getChildren()) {
                             String itemID = item.getKey();
                             String itemDescription = item.child("description").getValue().toString();
                             BigDecimal itemPrice = BigDecimal.valueOf(Double.parseDouble(item.child("price").getValue().toString().substring(1)));
 
                             Iterable<DataSnapshot> userProportns = item.child("userProportions").getChildren();
                             HashMap<User, BigDecimal> userProportions = new HashMap<User, BigDecimal>();
-                            for (DataSnapshot up: userProportns) {
+                            for (DataSnapshot up : userProportns) {
                                 BigDecimal amt = new BigDecimal(Double.parseDouble(up.getValue().toString().substring(1)));
                                 userProportions.put(new User(up.getKey()), amt); // TODO !!! NEED TO NOT CREATE USER, incorrect
                             }
 
                             Iterable<DataSnapshot> usersNotSpecified = item.child("usersWhoDidNotSpecify").getChildren();
                             HashSet<User> userProportionNotSpecified = new HashSet<User>();
-                            for (DataSnapshot user: usersNotSpecified) {
+                            for (DataSnapshot user : usersNotSpecified) {
                                 userProportionNotSpecified.add(new User(user.child("name").getValue().toString())); // todo look into overriding user equal function
                             }
 
                             Iterable<DataSnapshot> usersAmtSpecified = item.child("usersWhoSpecifiedAmts").getChildren();
                             HashSet<User> userSpecifiedAmtProportion = new HashSet<User>();
-                            for (DataSnapshot user: usersNotSpecified) {
+                            for (DataSnapshot user : usersNotSpecified) {
                                 userSpecifiedAmtProportion.add(new User(user.child("name").getValue().toString()));
                             }
 
                             Iterable<DataSnapshot> usersPerctSpecified = item.child("usersWhoSpecifiedPercentages").getChildren();
                             HashMap<User, Integer> specifiedPercentageProportions = new HashMap<User, Integer>();
-                            for (DataSnapshot userPerctg: usersPerctSpecified) {
+                            for (DataSnapshot userPerctg : usersPerctSpecified) {
                                 User user = new User(userPerctg.getKey());
                                 int percentage = Integer.parseInt(userPerctg.getValue().toString());
                                 specifiedPercentageProportions.put(user, percentage);
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                         firebaseRef.child("rooms").child(roomname).child("users").setValue(room.getUsers());
                         // todo update items in firebase since proportions changed after adding new member
 
-                        Toast.makeText(getBaseContext(), "Welcome " + username + "!", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getBaseContext(), "Welcome " + username + "!", Toast.LENGTH_LONG).show();
 
                         Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
                         goToChatRoom.putExtra("USERNAME", username);
