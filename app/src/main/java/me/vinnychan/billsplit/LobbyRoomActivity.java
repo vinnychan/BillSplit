@@ -20,6 +20,7 @@ import me.vinnychan.billsplit.model.Item;
 public class LobbyRoomActivity extends AppCompatActivity {
 
     String username;
+    String room;
 
     private Firebase firebaseRef;
 
@@ -29,6 +30,7 @@ public class LobbyRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lobby_room);
 
         username = getIntent().getStringExtra("USERNAME");
+        room = getIntent().getStringExtra("ROOM");
 
         Snackbar.make(findViewById(R.id.lobby_content), "Welcome " + username + "!", Snackbar.LENGTH_LONG).show();
         Firebase.setAndroidContext(this);
@@ -48,7 +50,7 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
         final List<Item> items = new ArrayList<>();
 
-        final RVAdapter adapter = new RVAdapter(items);
+        final RVAdapter adapter = new RVAdapter(items, username, room);
         rv.setAdapter(adapter);
 
 
@@ -75,6 +77,7 @@ public class LobbyRoomActivity extends AppCompatActivity {
                     items.add(i);
 
                     System.out.println(itemObject.getValue().getClass().getName());
+
 
                 }
                 adapter.notifyDataSetChanged();

@@ -11,11 +11,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by TING on 17-Oct-2015.
  */
 public class Item {
+    private String id;
     private String description;
     private BigDecimal price;
     private Map<User, BigDecimal> userProportions;
@@ -24,20 +26,25 @@ public class Item {
     private Map<User, Integer> specifiedPercentageProportions;
 
     public Item(String description, BigDecimal price) {
+        id = UUID.randomUUID().toString();
         this.description = description;
         this.price = price;
         userProportions = new HashMap<User, BigDecimal>();
         userProportionNotSpecified = new HashSet<User>();
         userSpecifiedAmtProportion = new HashSet<User>();
         specifiedPercentageProportions = new HashMap<User, Integer>();
+
     }
 
     private List<Item> items;
 
-
+    public String getID() { return id; }
     public String getDescription() { return description; }
     public BigDecimal getPrice() { return price; }
     public Map<User, BigDecimal> getUserProportions() { return userProportions; }
+    public Set<User> getUserProportionNotSpecified() { return userProportionNotSpecified; }
+    public Set<User> getUserSpecifiedAmtProportion() { return userSpecifiedAmtProportion; }
+    public Map<User, Integer> getSpecifiedPercentageProportions() { return specifiedPercentageProportions; }
 
     public void setDescription(String descrip) { description = descrip; }
     public void setPrice(BigDecimal price) { this.price = price; }
@@ -51,12 +58,8 @@ public class Item {
     }
 
     public void addUser(User user) {
-        BigDecimal remainingSum = getAmtNotCoveredBySpecifiedAmts();
         userProportionNotSpecified.add(user);
-        BigDecimal dividedPortion = remainingSum.divide(new BigDecimal(userProportionNotSpecified.size()));
-        for (User u: userProportionNotSpecified) {
-            userProportions.put(u, dividedPortion);
-        }
+        redistributeNonSpecifiedUsersProportions();
     }
 
     public void addUser(User user, int percentage) throws Exception {
@@ -78,13 +81,14 @@ public class Item {
     }
 
     public void editUserProportion(User user, Integer percentage) throws Exception {
-        BigDecimal desiredProportion = price.multiply(new BigDecimal(percentage/100));
-        BigDecimal remainingUnspecifiedAmt = getAmtNotCoveredBySpecifiedAmts();
-        if (desiredProportion.compareTo(remainingUnspecifiedAmt) == 1) throw new Exception("Percentage is too high!");
+//        BigDecimal desiredProportion = price.multiply(new BigDecimal(percentage/100));
+//        BigDecimal remainingUnspecifiedAmt = getAmtNotCoveredBySpecifiedAmts();
+//        if (desiredProportion.compareTo(remainingUnspecifiedAmt) == 1) throw new Exception("Percentage is too high!");
 
         userSpecifiedAmtProportion.remove(user);
         specifiedPercentageProportions.put(user, percentage);
         userProportionNotSpecified.remove(user);
+        userProportions.put(user, price.multiply(new BigDecimal(percentage/100)));
         redistributeNonSpecifiedUsersProportions();
     }
 
@@ -94,6 +98,7 @@ public class Item {
         userProportions.put(user, amount);
         specifiedPercentageProportions.remove(user);
         userProportionNotSpecified.remove(user);
+        userProportions.put(user, amount);
         redistributeNonSpecifiedUsersProportions();
     }
 
@@ -106,6 +111,7 @@ public class Item {
 
     private void redistributeNonSpecifiedUsersProportions() {
         int numUsers = userProportionNotSpecified.size();
+        if (numUsers == 0) return;
         BigDecimal sumToDistribute = getAmtNotCoveredBySpecifiedAmts();
         BigDecimal amtPerUser = sumToDistribute.divide(new BigDecimal(numUsers));
         for (User u: userProportionNotSpecified) {
