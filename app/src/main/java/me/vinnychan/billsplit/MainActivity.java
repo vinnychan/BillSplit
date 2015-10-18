@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Algorithmia", "Got exception", e);
                 e.printStackTrace();
             }
-
         }
     }
 }
