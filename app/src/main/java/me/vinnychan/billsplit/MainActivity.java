@@ -110,46 +110,13 @@ public class MainActivity extends AppCompatActivity {
                 firebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if (!snapshot.child("rooms").hasChild(roomname)) return;
 
-                        DataSnapshot roomRef = snapshot.child("rooms").child(roomname);
-
-                        User admin = new User(roomRef.child("admin").getValue().toString());
-
-
-
-                        Iterable<DataSnapshot> ds = snapshot.child("rooms").child(roomname).getChildren();
-
-
-                        String name = "";
-                        ArrayList<User> users = new ArrayList<User>();
-                        for (DataSnapshot s: ds) {
-                            if (s.getKey() == "admin") {
-                                admin = new User(s.getValue().toString());
-                            } else if (s.getKey() == "name") {
-                                name = s.getValue().toString();
-                            } else if (s.getKey() == "items"){
-                                //todo
-
-                            } else if (s.getKey() == "users") {
-                                for (DataSnapshot u: s.getChildren()) {
-                                    users.add(new User(u.child("name").getValue().toString()));
-                                }
-                            }
-                        }
-                        Room room = new Room(name, admin);
-                        room.setUsers(users);
-
-                        room.addMember(new User(username));
-//                        HashMap<String, Object> newUsersList = new HashMap<String, Object>(1);
-//                        newUsersList.put("users", room.getUsers());
-                        firebaseRef.child("rooms").child(roomname).child("users").setValue(room.getUsers());
 
                         Toast.makeText(getBaseContext(), "Welcome " + username + "!", Toast.LENGTH_LONG).show();
 
                         Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
                         goToChatRoom.putExtra("USERNAME", username);
-                        goToChatRoom.putExtra("ROOM", room.getName());
+//                        goToChatRoom.putExtra("ROOM", room.getName());
                         startActivity(goToChatRoom);
                     }
 
