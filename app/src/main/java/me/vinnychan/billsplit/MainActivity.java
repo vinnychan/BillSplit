@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -82,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                Toast.makeText(getBaseContext(), "Welcome " + username + "!", Toast.LENGTH_LONG).show();
 
                 Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
                 goToChatRoom.putExtra("USERNAME", username);

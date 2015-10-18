@@ -44,7 +44,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
     @Override
     public void onBindViewHolder(ItemViewHolder itemViewHolder, int i) {
         itemViewHolder.itemName.setText(items.get(i).getDescription());
-        itemViewHolder.itemPrice.setText(items.get(i).getPrice().toString());
+        itemViewHolder.itemPrice.setText("$" + items.get(i).getPrice().toString());
     }
 
     @Override
