@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/item_name"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 />
 
             <TextView
@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/item_price"
                 android:layout_below="@+id/item_name"
+                android:textSize="24sp"
                 />
 
             <ImageView
@@ -45,6 +46,7 @@
                 android:src="@drawable/ic_attach_money_black_36dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="10dp"
@@ -54,6 +56,7 @@
                 android:src="@drawable/ic_edit_black_36dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/pay_button"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="10dp"
