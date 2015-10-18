@@ -49,6 +49,11 @@ public class Item implements Serializable{
 
     public void setDescription(String descrip) { description = descrip; }
     public void setPrice(BigDecimal price) { this.price = price; }
+    public void setID(String uuid) { this.id = uuid; }
+    public void setUserProportions(Map<User, BigDecimal> userProportions) { this.userProportions = userProportions; }
+    public void setUserProportionNotSpecified(Set<User> notSpecifiedFor) { this.userProportionNotSpecified = notSpecifiedFor; }
+    public void setUserSpecifiedAmtProportion(Set<User> specifiedAmtFor) { this.userSpecifiedAmtProportion = specifiedAmtFor; }
+    public void setSpecifiedPercentageProportions(Map<User, Integer> mapuserpercentage) { this.specifiedPercentageProportions = mapuserpercentage; }
 
     public BigDecimal getUsersProportion(User user) {
         return userProportions.get(user);
