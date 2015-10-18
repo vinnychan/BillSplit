@@ -1,5 +1,6 @@
 package me.vinnychan.billsplit;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +33,9 @@ public class ParseImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parse_image);
+
+        setTitle("");
+
         // imageView = (ImageView) findViewById(R.id.imageView);
         final byte[] byteArray = getIntent().getByteArrayExtra("image");
         Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
@@ -44,9 +47,11 @@ public class ParseImageActivity extends AppCompatActivity {
 
 
         new AsyncTask<Void,Void,String>() {
+            ProgressDialog progressDialog;
             @Override
             protected void onPreExecute() {
-                // Start loading spinner...
+                progressDialog = ProgressDialog.show(ParseImageActivity.this, "Loading...",
+                        "Tearing apart your receipt!", false, false);
             }
             @Override
             protected String doInBackground(Void... params) {
@@ -65,7 +70,8 @@ public class ParseImageActivity extends AppCompatActivity {
                 parseItems(receipt, text);
                 for (Item i : receipt.getItems())
                     Log.d("Parser", i.toString());
-
+                progressDialog.dismiss();
+                setContentView(R.layout.activity_parse_image);
             }
         }.execute();
     }
