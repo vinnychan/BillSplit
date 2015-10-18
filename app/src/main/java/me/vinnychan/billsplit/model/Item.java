@@ -2,6 +2,7 @@ package me.vinnychan.billsplit.model;
 
 import com.firebase.client.Firebase;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * Created by TING on 17-Oct-2015.
  */
-public class Item {
+public class Item implements Serializable{
     private String id;
     private String description;
     private BigDecimal price;
@@ -48,6 +49,11 @@ public class Item {
 
     public void setDescription(String descrip) { description = descrip; }
     public void setPrice(BigDecimal price) { this.price = price; }
+    public void setID(String uuid) { this.id = uuid; }
+    public void setUserProportions(Map<User, BigDecimal> userProportions) { this.userProportions = userProportions; }
+    public void setUserProportionNotSpecified(Set<User> notSpecifiedFor) { this.userProportionNotSpecified = notSpecifiedFor; }
+    public void setUserSpecifiedAmtProportion(Set<User> specifiedAmtFor) { this.userSpecifiedAmtProportion = specifiedAmtFor; }
+    public void setSpecifiedPercentageProportions(Map<User, Integer> mapuserpercentage) { this.specifiedPercentageProportions = mapuserpercentage; }
 
     public BigDecimal getUsersProportion(User user) {
         return userProportions.get(user);

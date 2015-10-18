@@ -5,13 +5,14 @@ import android.media.Image;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Created by TING on 17-Oct-2015.
  */
-public class Receipt implements Parcelable {
+public class Receipt implements Serializable {
     private ArrayList<Item> items;
     private String roomID;
 

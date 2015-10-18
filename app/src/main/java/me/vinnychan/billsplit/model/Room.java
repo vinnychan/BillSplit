@@ -24,10 +24,6 @@ public class Room {
         users = new ArrayList<User>();
         users.add(admin);
         items = new HashSet<Item>();
-
-        items.add(new Item("item a", new BigDecimal(1))); //todo: remove eventually
-        items.add(new Item("item b", new BigDecimal(2)));
-        items.add(new Item("item c", new BigDecimal(3)));
     }
 
     public String getName() { return name; }
@@ -61,6 +57,8 @@ public class Room {
     public void setAdmin(User admin) {
         this.admin = admin;
     }
+
+    public void setItems(Set<Item> items) { this.items = items; }
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
