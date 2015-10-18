@@ -8,21 +8,17 @@ import java.util.ArrayList;
  * Created by TING on 17-Oct-2015.
  */
 public class Receipt {
-    private String id;
     private Image photo;
     private ArrayList<Item> items;
     private String roomID;
 
     public Receipt(Image photo, Room room) {
-        id = createNewId();
         this.photo = photo;
         items = new ArrayList<>();
         roomID = room.getId();
     }
 
     public int getNumItems() { return items.size(); }
-
-    public String getID() { return id; }
 
     public Image getPhoto() { return photo; }
 

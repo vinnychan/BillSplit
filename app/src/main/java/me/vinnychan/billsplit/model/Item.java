@@ -12,7 +12,6 @@ import java.util.Set;
  * Created by TING on 17-Oct-2015.
  */
 public class Item {
-    private String id;
     private String description;
     private BigDecimal price;
     private Map<User, BigDecimal> userProportions;
@@ -20,8 +19,7 @@ public class Item {
     private Set<User> userSpecifiedAmtProportion;
     private Map<User, Integer> specifiedPercentageProportions;
 
-    public Item(String description, BigDecimal price, Receipt receipt) {
-        id = createNewId(receipt);
+    public Item(String description, BigDecimal price) {
         this.description = description;
         this.price = price;
         userProportions = new HashMap<User, BigDecimal>();
@@ -30,7 +28,6 @@ public class Item {
         specifiedPercentageProportions = new HashMap<User, Integer>();
     }
 
-    public String getID() { return id; }
     public String getDescription() { return description; }
     public BigDecimal getPrice() { return price; }
     public Map<User, BigDecimal> getUserProportions() { return userProportions; }
@@ -43,9 +40,7 @@ public class Item {
     }
 
     public Boolean isUsersProportionManuallySet(User user) {
-        if (userSpecifiedAmtProportion.contains(user)) return true;
-        if (specifiedPercentageProportions.containsKey(user)) return true;
-        return false;
+        return (userSpecifiedAmtProportion.contains(user) || specifiedPercentageProportions.containsKey(user));
     }
 
     public void addUser(User user) {
@@ -68,13 +63,9 @@ public class Item {
     }
 
     public void removeUser(User user) {
-        if (userSpecifiedAmtProportion.contains(user)) {
-            userSpecifiedAmtProportion.remove(user);
-        } else if (specifiedPercentageProportions.containsKey(user)) {
-            specifiedPercentageProportions.remove(user);
-        } else {
-            userProportionNotSpecified.remove(user);
-        }
+        userSpecifiedAmtProportion.remove(user);
+        specifiedPercentageProportions.remove(user);
+        userProportionNotSpecified.remove(user);
         userProportions.remove(user);
         redistributeNonSpecifiedUsersProportions();
     }
@@ -84,29 +75,19 @@ public class Item {
         BigDecimal remainingUnspecifiedAmt = getAmtNotCoveredBySpecifiedAmts();
         if (desiredProportion.compareTo(remainingUnspecifiedAmt) == 1) throw new Exception("Percentage is too high!");
 
-        if (userSpecifiedAmtProportion.contains(user)) {
-
-        } else if (specifiedPercentageProportions.containsKey(user)) {
-
-        } else {
-
-        }
+        userSpecifiedAmtProportion.remove(user);
+        specifiedPercentageProportions.put(user, percentage);
+        userProportionNotSpecified.remove(user);
         redistributeNonSpecifiedUsersProportions();
-        //todo
     }
 
     public void editUserProportion(User user, BigDecimal amount) throws Exception {
         if (amount.compareTo(getAmtNotCoveredBySpecifiedAmts()) == 1) throw new Exception("Amount is more than possible!");
 
-        if (userSpecifiedAmtProportion.contains(user)) {
-            userProportions.put(user, amount);
-        } else if (specifiedPercentageProportions.containsKey(user)) {
-
-        } else {
-
-        }
+        userProportions.put(user, amount);
+        specifiedPercentageProportions.remove(user);
+        userProportionNotSpecified.remove(user);
         redistributeNonSpecifiedUsersProportions();
-        //todo
     }
 
     public void removeSpecifiedUserProportion(User user) {
@@ -114,12 +95,6 @@ public class Item {
         specifiedPercentageProportions.remove(user);
         userProportionNotSpecified.add(user);
         redistributeNonSpecifiedUsersProportions();
-    }
-
-    private String createNewId(Receipt receipt) {
-        return receipt.getID() + receipt.getNumItems();
-        // TODO; fix up this method -- concurrency, might get clash for ids
-        // will probably use Firebase ids instead once it's implemented
     }
 
     private void redistributeNonSpecifiedUsersProportions() {
