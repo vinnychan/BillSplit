@@ -15,7 +15,6 @@ public class Receipt {
     public Receipt(Image photo, Room room) {
         this.photo = photo;
         items = new ArrayList<>();
-        roomID = room.getId();
     }
 
     public int getNumItems() { return items.size(); }
@@ -29,9 +28,4 @@ public class Receipt {
     public void addItem(Item item) { items.add(item); }
 
     public void removeItem(Item item) { items.remove(item); }
-
-    private String createNewId() {
-        return "";
-        //todo firebase stuff
-    }
 }
