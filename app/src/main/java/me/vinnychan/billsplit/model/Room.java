@@ -1,8 +1,11 @@
 package me.vinnychan.billsplit.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by TING on 17-Oct-2015.
@@ -13,13 +16,21 @@ public class Room {
     private User admin;
     private ArrayList<User> users;
     private Receipt receipt;
+    private Set<Item> items;
 
     public Room(String name, User admin) {
         this.admin = admin;
         this.name = name;
         users = new ArrayList<User>();
         users.add(admin);
+        items = new HashSet<Item>();
+
+        items.add(new Item("item a", new BigDecimal(1))); //todo: remove eventually
+        items.add(new Item("item b", new BigDecimal(2)));
+        items.add(new Item("item c", new BigDecimal(3)));
     }
+
+    public String getName() { return name; }
 
     public User getAdmin() { return admin; }
 
@@ -33,12 +44,18 @@ public class Room {
 
     public void addMember(User member) {
         users.add(member);
+        for (Item i: items) {
+            i.addUser(member);
+        }
     }
 
     public void removeMember(User member) {
         if (!member.equals(admin))
             users.remove(member);
         // todo
+        for (Item i: items) {
+            i.removeUser(member);
+        }
     }
 
     public void setAdmin(User admin) {
@@ -47,5 +64,13 @@ public class Room {
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
+    }
+
+    public void addItem(Item i) {
+        items.add(i);
+    }
+
+    public void removeItem(Item i) {
+        items.remove(i);
     }
 }

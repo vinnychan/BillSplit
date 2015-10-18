@@ -5,6 +5,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -20,8 +22,12 @@ import me.vinnychan.billsplit.model.Item;
 public class LobbyRoomActivity extends AppCompatActivity {
 
     String username;
+    String room;
 
     private Firebase firebaseRef;
+//    SeekBar seekBar;
+//    TextView amountPaying;
+//    TextView percentage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,11 @@ public class LobbyRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lobby_room);
 
         username = getIntent().getStringExtra("USERNAME");
+        room = getIntent().getStringExtra("ROOM");
+
+//        seekBar = (SeekBar) findViewById(R.id.SeekBarId);
+//        amountPaying = (TextView) findViewById(R.id.amount_paying);
+//        percentage = (TextView) findViewById(R.id.percentage);
 
         Snackbar.make(findViewById(R.id.lobby_content), "Welcome " + username + "!", Snackbar.LENGTH_LONG).show();
         Firebase.setAndroidContext(this);
@@ -48,7 +59,7 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
         final List<Item> items = new ArrayList<>();
 
-        final RVAdapter adapter = new RVAdapter(items);
+        final RVAdapter adapter = new RVAdapter(items, username, room);
         rv.setAdapter(adapter);
 
 
@@ -76,6 +87,7 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
                     System.out.println(itemObject.getValue().getClass().getName());
 
+
                 }
                 adapter.notifyDataSetChanged();
 
@@ -87,6 +99,25 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
             }
         });
+
+//        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+//            public void onStopTrackingTouch(SeekBar bar) {
+//                int value = bar.getProgress(); // the value of the seekBar progress
+//            }
+//
+//            public void onStartTrackingTouch(SeekBar bar) {
+//
+//            }
+//
+//            public void onProgressChanged(SeekBar bar,
+//                                          int paramInt, boolean paramBoolean) {
+//                percentage.setText("" + paramInt + "%"); // here in textView the percent will be shown
+//            }
+//        });
+
+
+
 
     }
 

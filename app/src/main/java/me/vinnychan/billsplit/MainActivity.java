@@ -112,8 +112,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot snapshot) {
                         if (!snapshot.child("rooms").hasChild(roomname)) return;
 
+                        DataSnapshot roomRef = snapshot.child("rooms").child(roomname);
+
+                        User admin = new User(roomRef.child("admin").getValue().toString());
+
+
+
                         Iterable<DataSnapshot> ds = snapshot.child("rooms").child(roomname).getChildren();
-                        User admin = new User("");
+
+
                         String name = "";
                         ArrayList<User> users = new ArrayList<User>();
                         for (DataSnapshot s: ds) {
@@ -121,7 +128,10 @@ public class MainActivity extends AppCompatActivity {
                                 admin = new User(s.getValue().toString());
                             } else if (s.getKey() == "name") {
                                 name = s.getValue().toString();
-                            } else {
+                            } else if (s.getKey() == "items"){
+                                //todo
+
+                            } else if (s.getKey() == "users") {
                                 for (DataSnapshot u: s.getChildren()) {
                                     users.add(new User(u.child("name").getValue().toString()));
                                 }
@@ -139,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
                         goToChatRoom.putExtra("USERNAME", username);
-//                goToChatRoom.putExtra("ROOM", room);
+                        goToChatRoom.putExtra("ROOM", room.getName());
                         startActivity(goToChatRoom);
                     }
 
