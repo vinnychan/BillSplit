@@ -20,6 +20,43 @@ public class Item {
         userProportions = new HashMap<User, BigDecimal>();
     }
 
+    public String getID() { return id; }
+    public String getDescription() { return description; }
+    public BigDecimal getPrice() { return price; }
+    public Map<User, BigDecimal> getUserProportions() { return userProportions; }
+
+    public void setDescription(String descrip) { description = descrip; }
+    public void setPrice(BigDecimal price) { this.price = price; }
+
+    public BigDecimal getUsersProportion(User user) {
+        return userProportions.get(user);
+    }
+
+    public void addUser(User user) {
+        int numUsers = userProportions.size();
+        //todo: will be implemented
+    }
+
+    public void addUser(User user, int percentage) {
+        //todo
+    }
+
+    public void addUser(User user, BigDecimal amount) {
+
+    }
+
+    public void removeUser(User user) {
+        //todo: will also be implemented
+    }
+
+    public void editUserProportion(int percentage) {
+        //todo
+    }
+
+    public void editUserProportion(BigDecimal amount) {
+
+    }
+
     private String createNewId(Receipt receipt) {
         return receipt.getID() + receipt.getNumItems();
         // TODO; fix up this method -- concurrency, might get clash for ids
