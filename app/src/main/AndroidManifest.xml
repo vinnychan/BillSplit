@@ -30,6 +30,10 @@
             android:name=".ParseImageActivity"
             android:label="@string/title_activity_parse_image" >
         </activity>
+        <activity
+            android:name=".ListItemsActivity"
+            android:label="@string/title_activity_list_items" >
+        </activity>
     </application>
 
 </manifest>

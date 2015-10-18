@@ -5,4 +5,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_list_class">ListClass</string>
+    <string name="title_activity_list_items">ListItems</string>
 </resources>
