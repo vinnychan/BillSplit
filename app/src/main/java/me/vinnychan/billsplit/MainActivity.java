@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 firebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if (!snapshot.child("rooms").hasChild(roomname)) return;
 
                         DataSnapshot roomRef = snapshot.child("rooms").child(roomname);
                         User roomAdmin = new User(roomRef.child("admin").getValue().toString());
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
                         goToChatRoom.putExtra("USERNAME", username);
-                        goToChatRoom.putExtra("ROOM", room.getName());
+//                        goToChatRoom.putExtra("ROOM", room.getName());
                         startActivity(goToChatRoom);
                     }
 
