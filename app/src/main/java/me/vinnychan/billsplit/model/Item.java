@@ -1,7 +1,11 @@
 package me.vinnychan.billsplit.model;
 
+import com.firebase.client.Firebase;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +30,23 @@ public class Item {
         userProportionNotSpecified = new HashSet<User>();
         userSpecifiedAmtProportion = new HashSet<User>();
         specifiedPercentageProportions = new HashMap<User, Integer>();
+    }
+
+    private List<Item> items;
+
+    private Firebase firebaseRef;
+
+    public void initializeData() {
+        items = new ArrayList<>();
+        items.add(new Item("Item 1", new BigDecimal(5.00)));
+        items.add(new Item("Item 2", new BigDecimal(15.00)));
+        items.add(new Item("Item 3", new BigDecimal(10.00)));
+
+    }
+
+    public List<Item> getItems() {
+        initializeData();
+        return items;
     }
 
     public String getDescription() { return description; }
@@ -125,5 +146,9 @@ public class Item {
             if (totalSoFar.compareTo(price) == 1) return false;
         }
         return totalSoFar.equals(price);
+    }
+
+    public String toString() {
+        return description + " ($" + price + ")";
     }
 }

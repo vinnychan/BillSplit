@@ -2,6 +2,10 @@ package me.vinnychan.billsplit;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -26,33 +30,39 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
         username = getIntent().getStringExtra("USERNAME");
         Firebase.setAndroidContext(this);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        final TextView mTextCondition = (TextView) findViewById(R.id.mTextCondition);
-
         firebaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
 
-        Firebase itemRef = firebaseRef.child("items");
-        Item sampleItem = new Item("sample item2", new BigDecimal(100));
-        itemRef.push().setValue(sampleItem);
+        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
 
-        firebaseRef.child("Item 1").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.getValue());
-                mTextCondition.setText(dataSnapshot.getValue().toString());
-            }
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+        Item item = new Item("test", new BigDecimal(1.00));
 
-            }
-        });
+        RVAdapter adapter = new RVAdapter(item.getItems());
+        rv.setAdapter(adapter);
+
+        System.out.println(firebaseRef.child("Items2"));
+
+
+        for (Item oitem : item.getItems()) {
+            firebaseRef.child(oitem.getDescription()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    System.out.println(dataSnapshot.getValue());
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
     }
-
 }
