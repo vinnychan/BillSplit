@@ -9,18 +9,19 @@ import java.util.List;
  * Represents a "room"/group of people who are splitting the bill amongst them
  */
 public class Room {
+    private String name;
     private User admin;
     private ArrayList<User> users;
     private Receipt receipt;
 
-    public Room(User admin) {
+    public Room(String name, User admin) {
         this.admin = admin;
+        this.name = name;
         users = new ArrayList<User>();
+        users.add(admin);
     }
 
     public User getAdmin() { return admin; }
-
-    public String getAdminID() { return admin.getID(); }
 
     public ArrayList<User> getUsers() { return users; }
 
@@ -35,7 +36,9 @@ public class Room {
     }
 
     public void removeMember(User member) {
-        users.remove(member);
+        if (!member.equals(admin))
+            users.remove(member);
+        // todo
     }
 
     public void setAdmin(User admin) {

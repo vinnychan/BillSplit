@@ -1,14 +1,9 @@
 package me.vinnychan.billsplit;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -25,9 +20,7 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
     String username;
 
-
-    private Firebase fireBaseRef;
-
+    private Firebase firebaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +28,14 @@ public class LobbyRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lobby_room);
 
         username = getIntent().getStringExtra("USERNAME");
-
         Firebase.setAndroidContext(this);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        fireBaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
+        firebaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
 
@@ -57,35 +48,30 @@ public class LobbyRoomActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
 
 
-            fireBaseRef.child("Items2").addValueEventListener(new ValueEventListener() {
+        firebaseRef.child("Items2").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                items.clear();
+                for (DataSnapshot itemObject : dataSnapshot.getChildren()) {
+                    Item i = new Item(itemObject.getKey(), new BigDecimal((long) itemObject.getValue()));
+                    items.add(i);
 
-                    items.clear();
-                    for (DataSnapshot itemObject : dataSnapshot.getChildren()) {
-                        Item i = new Item(itemObject.getKey(), new BigDecimal((long) itemObject.getValue()));
-                        items.add(i);
-
-                        System.out.println(itemObject.getValue().getClass().getName());
-
-                    }
-                    adapter.notifyDataSetChanged();
+                    System.out.println(itemObject.getValue().getClass().getName());
 
                 }
+                adapter.notifyDataSetChanged();
+
+            }
 
 
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
 
-                }
-            });
-
-
-
-
-
+            }
+        });
 
     }
 
 }
+
