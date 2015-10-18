@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent goToChatRoom = new Intent(getBaseContext(), LobbyRoomActivity.class);
                         goToChatRoom.putExtra("USERNAME", username);
-//                        goToChatRoom.putExtra("ROOM", room.getName());
+                        goToChatRoom.putExtra("ROOM", room.getName());
                         startActivity(goToChatRoom);
                     }
 
