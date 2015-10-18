@@ -88,6 +88,16 @@
                 android:layout_below="@id/amount_paying"
                 android:layout_weight="92" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/item_uuid"
+                android:maxHeight="0dp"
+                android:maxLength="0"
+                android:maxWidth="0dp"
+                android:minHeight="0dp"
+                android:visibility="invisible" />
 
 
         </RelativeLayout>
