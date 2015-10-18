@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.vinnychan.billsplit.model.Item;
+import me.vinnychan.billsplit.model.Room;
 import me.vinnychan.billsplit.model.User;
 
 /**
@@ -30,7 +31,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
     private List<Item> items;
     private String room;
     private User user;
-    private Firebase firebaseRef;
 
     RVAdapter(List<Item> items, String username, String room){
         this.items = items;
@@ -52,26 +52,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_view_card_item, viewGroup, false);
-        ItemViewHolder ivh = new ItemViewHolder(v);
+        ItemViewHolder ivh = new ItemViewHolder(v, user, room, items);
         return ivh;
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder itemViewHolder, final int i) {
+    public void onBindViewHolder(final ItemViewHolder itemViewHolder, final int i) {
         itemViewHolder.itemName.setText(items.get(i).getDescription());
         itemViewHolder.itemPrice.setText("$" + items.get(i).getPrice().toString());
+        itemViewHolder.itemUUID.setText(items.get(i).getID());
         itemViewHolder.editButton.setOnClickListener(new ImageView.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //todo
-//                Firebase.setAndroidContext(view.getContext());
-                try {
-                    updateItemProportion(i, user, 10);
-                } catch (Exception e) {
-                    System.out.println("exception thrown");
-                    e.printStackTrace();
-                }
-
             }
         });
     }
@@ -81,20 +74,26 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView itemName;
         TextView itemPrice;
+        TextView itemUUID;
         ImageView editButton; // currently can only edit by set amount, no option for percentage
         SeekBar seekBar;
         TextView amountPaying;
         TextView percentage;
+        Firebase firebaseRef;
 
-        ItemViewHolder(View itemView) {
+        ItemViewHolder(View itemView, User u, String rm, List<Item> its) {
             super(itemView);
+            final User user = u;
+            final String room = rm;
+            final List<Item> items = its;
             cv = (CardView)itemView.findViewById(R.id.cv);
             itemName = (TextView)itemView.findViewById(R.id.item_name);
             itemPrice = (TextView)itemView.findViewById(R.id.item_price);
+            itemUUID = (TextView)itemView.findViewById(R.id.item_uuid);
             editButton = (ImageView)itemView.findViewById(R.id.edit_button);
             seekBar = (SeekBar) itemView.findViewById(R.id.SeekBarId);
             amountPaying = (TextView) itemView.findViewById(R.id.amount_paying);
@@ -104,6 +103,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
 
                 public void onStopTrackingTouch(SeekBar bar) {
                     int value = bar.getProgress(); // the value of the seekBar progress
+                    String itemID = itemUUID.getText().toString();
+                    try {
+                        RVAdapter.updateItemProportion(itemID, user, value, items, room);
+                    } catch (Exception e) {
+                        Toast.makeText(bar.getContext(),e.getMessage(),Toast.LENGTH_SHORT);
+                    }
                 }
 
                 public void onStartTrackingTouch(SeekBar bar) {
@@ -121,18 +126,23 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
         }
     }
 
-    private void updateItemProportion(int itemIndex, User user, int percentage) throws Exception {
+    static private void updateItemProportion(String itemID, User user, int percentage, List<Item> items, String room) throws Exception {
         System.out.println("got to update proportions");
-        Item targetItem = items.get(itemIndex);
+        Item targetItem = null;
+        for (Item i: items) {
+            if (i.getID().equals(itemID))
+                targetItem = i;
+        }
+        if (targetItem == null) return;
         targetItem.editUserProportion(user, percentage);
-        firebaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
+        Firebase firebaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
 //        firebaseRef.child("rooms").child(room).child("items").child(targetItem.getID()).setValue(createItemMap(targetItem));
         firebaseRef.child("rooms").child(room).child("items").updateChildren(createItemMap(targetItem));
 //        firebaseRef.child(room).child("items").setValue(targetItem);
         System.out.println("finished updating proportions");
     }
 
-    private HashMap<String, Object> createItemMap(Item item) {
+    static private HashMap<String, Object> createItemMap(Item item) {
         HashMap<String, Object> itemMap = new HashMap<String, Object>();
         itemMap.put("description",item.getDescription());
         itemMap.put("price", NumberFormat.getCurrencyInstance().format(item.getPrice()).toString());

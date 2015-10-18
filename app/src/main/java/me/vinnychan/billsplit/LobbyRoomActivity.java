@@ -114,31 +114,9 @@ public class LobbyRoomActivity extends AppCompatActivity {
 
                     items.add(i);
 
-
-//                    BigDecimal price;
-////                    if (itemObject.child("price").getValue() instanceof Double) {
-////                        price = new BigDecimal((double) itemObject.child("price").getValue());
-////
-////                    } else {
-////                        price = new BigDecimal(0);
-////                    }
-////
-////                    if (itemObject.child("price").getValue() instanceof Long) {
-////                        price = new BigDecimal((long) itemObject.child("price").getValue());
-////                    }
-//
-//                    // NOTE: NOT ALL ITEM FIELDS ARE PARSED BELOW!
-//                    price = new BigDecimal(itemObject.child("price").getValue().toString().substring(1));
-//                    String descrip = itemObject.child("description").getValue().toString();
-//                    Item i = new Item(itemObject.getKey(), price);
-//                    items.add(i);
-
                     System.out.println(itemObject.getValue().getClass().getName());
-
-
                 }
                 adapter.notifyDataSetChanged();
-
             }
 
 
