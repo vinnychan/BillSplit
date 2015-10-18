@@ -65,7 +65,7 @@ public class ParseImageActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_parse_image);
 
 
-                text = "TAXES PER $100 EARNED\n\nSERVED EV:\nCANADA'S GOVERNMENTS\n\nGUEST\nAVERAGE rmlu\n\n4qu w. 1015\n\nINCOME TAXES $14.34\nPAYROLL TAXES $1\"\nSALES TAXES $7\nPROPERTY TAXES $4\nPROFIT TAXES $4\n\"SIN\" TAXES $1\nVEHICLE/FUEL TAXES $1\nOTHER TAXES $2\nTOTAL $44\n\nGDVERNMENTS TAKE $44\nFROM EVERY $100\nCANADIAN FAMILIES EARN\n\nwwwfraserinshlutearg\n\n";
+                String mockOCRText = "TAXES PER $100 EARNED\n\nSERVED EV:\nCANADA'S GOVERNMENTS\n\nGUEST\nAVERAGE rmlu\n\n4qu w. 1015\n\nINCOME TAXES $14.34\nPAYROLL TAXES $1\"\nSALES TAXES $7\nPROPERTY TAXES $4\nPROFIT TAXES $4\n\"SIN\" TAXES $1\nVEHICLE/FUEL TAXES $1\nOTHER TAXES $2\nTOTAL $44\n\nGDVERNMENTS TAKE $44\nFROM EVERY $100\nCANADIAN FAMILIES EARN\n\nwwwfraserinshlutearg\n\n";
 
                 parseItems(receipt, text);
                 for (Item i : receipt.getItems())
