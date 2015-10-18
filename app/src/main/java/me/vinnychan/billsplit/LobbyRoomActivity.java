@@ -6,8 +6,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 public class LobbyRoomActivity extends AppCompatActivity {
+
+    String username;
+
+    private Firebase fireBaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +32,33 @@ public class LobbyRoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        username = getIntent().getStringExtra("USERNAME");
+
+        Firebase.setAndroidContext(this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final TextView mTextCondition = (TextView) findViewById(R.id.mTextCondition);
+
+        fireBaseRef = new Firebase("https://billsplitdubhacks.firebaseio.com");
+
+        fireBaseRef.child("Item 1").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println(dataSnapshot.getValue());
+                mTextCondition.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
             }
         });
     }

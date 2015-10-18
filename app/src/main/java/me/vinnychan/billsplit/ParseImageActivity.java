@@ -9,6 +9,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.File;
+
+
 
 public class ParseImageActivity extends ActionBarActivity {
 
