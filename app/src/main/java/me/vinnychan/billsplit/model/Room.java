@@ -9,7 +9,6 @@ import java.util.List;
  * Represents a "room"/group of people who are splitting the bill amongst them
  */
 public class Room {
-    private String id;
     private User admin;
     private ArrayList<User> users;
     private Receipt receipt;
@@ -18,8 +17,6 @@ public class Room {
         this.admin = admin;
         users = new ArrayList<User>();
     }
-
-    public String getId() { return id; }
 
     public User getAdmin() { return admin; }
 
